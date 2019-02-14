@@ -1,0 +1,9 @@
+#!/bin/bash
+
+COEFFS="-coeffs 1"
+DIVISORS="-divisors 1,1,1,1,1,1,1,1"
+DISC="-discriminant -7"
+TREE="-tree input/tree.txt"
+OUTPUT="-output Mod3.txt"
+
+./congr $COEFFS $DIVISORS $DISC $OUTPUT $TREE
