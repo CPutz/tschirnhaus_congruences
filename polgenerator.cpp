@@ -5,7 +5,8 @@
 #include "mathextra.hpp"
 
 PolGenerator::PolGenerator(int const n, int const p,
-        std::vector<long> const &fixedcoefficients, long *divisors,
+        std::vector<long> const &fixedcoefficients,
+        std::vector<long> const &divisors,
         long const discriminant, std::fstream &treestream) {
     this->divisors = divisors;
     this->discriminant = discriminant;
@@ -17,7 +18,7 @@ PolGenerator::PolGenerator(int const n, int const p,
     aupper = new long[n + 1];
     alower = new long[n + 1];
 
-    this->disctree = new PolTree(treestream, p);
+    this->disctree = new PolModTree(treestream, p);
 
     //initialize the fixed coefficients
     avalues[0] = 1;
@@ -29,7 +30,6 @@ PolGenerator::PolGenerator(int const n, int const p,
         alower[i] = 0;
         aupper[i] = p-1;
     }
-
     //create squares mod p lookup table
     squares_p = new bool[p];
     for (int i = 0; i < p; i++) {
@@ -41,7 +41,6 @@ PolGenerator::PolGenerator(int const n, int const p,
 }
 
 PolGenerator::~PolGenerator() {
-    delete[] divisors;
     delete[] avalues;
     delete[] alower;
     delete[] aupper;
@@ -133,10 +132,5 @@ void PolGenerator::create_coefficients(long container[]) {
 bool PolGenerator::disc_is_square() {
     long disc = this->disctree->get_val();
     long disc_p = mod(disc * this->discriminant, this->p);
-    if (avalues[1] == 0 && avalues[2] == 0 && avalues[3] == 0 && avalues[4] == 0 &&
-        avalues[5] == 0 && avalues[6] == 0 && avalues[7] == 1 && avalues[8] == 2) {
-        std::cout << mod(disc, this->p) << " " << disc_p << std::endl;
-        this->disctree->print();
-    }
     return squares_p[disc_p];
 }

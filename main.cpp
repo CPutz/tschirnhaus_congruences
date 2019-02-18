@@ -7,12 +7,11 @@
 // Input
 std::string treefile = "input/tree.txt";
 std::fstream treestream;
+long degree;
 long discriminant;
-long *divisors;
+long modulus;
+std::vector<long> divisors;
 std::vector<long> fixedcoefficients;
-
-const int POL_TERMS = 9;
-const int POL_DEGREE = 8;
 
 // Output
 std::string outputfile = "output.txt";
@@ -23,7 +22,7 @@ std::fstream outputstream;
  * Process a single work-unit
  */
 void process_work(PolGenerator &generator, std::vector<int> const &combination) {
-    long coefficients[POL_TERMS];
+    long coefficients[degree+1];
     bool polAvailable = true;
     // Initialize generator with given congruence values, otherwise return;
     if (!generator.init(combination)) {
@@ -37,7 +36,7 @@ void process_work(PolGenerator &generator, std::vector<int> const &combination) 
         if (isSquare) {
             generator.create_coefficients(coefficients);
             outputstream << "<" << coefficients[1];
-            for (int i = 2; i < POL_TERMS; i++) {
+            for (int i = 2; i <= degree; i++) {
                 outputstream << ", " << coefficients[i];
             }
             outputstream << ">," << std::endl;
@@ -80,16 +79,12 @@ void init_arg(int argc, char **argv) {
             }
             std::stringstream ss(argv[ni]);
             long d;
-            std::vector<long> divisors_tmp;
+            //polynomial is monic
+            divisors.push_back(1);
             while (ss >> d) {
-                divisors_tmp.push_back(d);
+                divisors.push_back(d);
                 ss.ignore(1, ',');
             }
-            divisors = new long[POL_TERMS];
-            //extend the divisors with trailing 1's
-            std::fill_n(divisors, POL_TERMS, 1);
-            std::copy(divisors_tmp.begin(), divisors_tmp.end(),
-                divisors + POL_TERMS - divisors_tmp.size());
             i = ni;
         } else if (cmdarg == "-discriminant") {
             if (ni >= argc) {
@@ -105,6 +100,22 @@ void init_arg(int argc, char **argv) {
                 std::exit(1);
             }
             treefile = argv[ni];
+            i = ni;
+        } else if (cmdarg == "-modulus") {
+            if (ni >= argc) {
+                std::cout << "-modulus <name> : set modulus" << std::endl;
+                std::exit(1);
+            }
+            std::stringstream ss(argv[ni]);
+            ss >> modulus;
+            i = ni;
+        } else if (cmdarg == "-degree") {
+            if (ni >= argc) {
+                std::cout << "-degree <name> : set degree" << std::endl;
+                std::exit(1);
+            }
+            std::stringstream ss(argv[ni]);
+            ss >> degree;
             i = ni;
         } else {
             std::cout << "Unknown argument " << argv[i] << std::endl;
@@ -131,15 +142,13 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    int p = 3;
-
     // Create polynomial generator
-    PolGenerator generator(POL_DEGREE, p, fixedcoefficients, divisors, discriminant, treestream);
+    PolGenerator generator(degree, modulus, fixedcoefficients, divisors, discriminant, treestream);
     treestream.close();
 
-    outputstream << "{" << p;
-    for (int i = 1; i < POL_DEGREE; i++) {
-        outputstream << ", " << p; 
+    outputstream << "{" << modulus;
+    for (int i = 1; i < degree; i++) {
+        outputstream << ", " << modulus; 
     }
     outputstream << "}" << std::endl;
     outputstream << "[" << std::endl;
@@ -147,8 +156,8 @@ int main(int argc, char **argv) {
     std::vector<int> combination = std::vector<int>(); //empty vector
     process_work(generator, combination);
 
-    outputstream.close();
     outputstream << "]" << std::endl;
+    outputstream.close();
     
     return 0;
 }
