@@ -16,13 +16,12 @@ public:
 	Node(std::vector<Node *> children, long p);
 	~Node();
 	long get_coeff();
-	void add_coeff(long val);
 	void eval(long val);
 	void print();
 };
 
 
-class PolTree {
+class PolModTree {
 private:
 	Node *head;
 	std::vector<std::vector<Node *>> nodes;
@@ -30,9 +29,9 @@ private:
 	long p;
 
 public:
-	PolTree(Node *head, std::vector<std::vector<Node *>> nodes, long p);
-	PolTree(std::fstream &fs, long p);
-	~PolTree();
+	PolModTree(Node *head, std::vector<std::vector<Node *>> nodes, long p);
+	PolModTree(std::fstream &fs, long p);
+	~PolModTree();
 	long get_val();
 	void eval(int level, long val);
 	void print();

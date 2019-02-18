@@ -1,7 +1,6 @@
 #include "polmodtree.hpp"
 #include <iostream>
 #include <sstream>
-#include "mathextra.hpp"
 
 
 Node::Node(long coeff, long p) { 
@@ -24,10 +23,6 @@ long Node::get_coeff() {
 	return this->coeff;
 }
 
-void Node::add_coeff(long val) {
-	this->coeff = (this->coeff + val) % this->p;
-}
-
 void Node::eval(long val) {
 	std::vector<Node *>::iterator it = this->children.begin();
 	this->coeff = (*it)->get_coeff();
@@ -35,10 +30,11 @@ void Node::eval(long val) {
 	//use Horner scheme on children
 	while (++it != this->children.end()) {
 		Node *c = *it;
-		this->coeff = (this->coeff * val) % this->p;
+		this->coeff = this->coeff * val;
 		if (c != nullptr) {
-			c->add_coeff(this->coeff);
+			this->coeff += c->get_coeff();
 		}
+		this->coeff = (this->coeff % this->p);
 	}
 }
 
@@ -47,13 +43,13 @@ void Node::print() {
 }
 
 
-PolTree::PolTree(Node *head, std::vector<std::vector<Node *>> nodes, long p) {
+PolModTree::PolModTree(Node *head, std::vector<std::vector<Node *>> nodes, long p) {
 	this->head = head;
 	this->nodes = nodes;
 	this->p = p;
 }
 
-PolTree::PolTree(std::fstream &fs, long p) {
+PolModTree::PolModTree(std::fstream &fs, long p) {
 	this->p = p;
 	std::string line;
 	std::getline(fs, line);
@@ -61,7 +57,7 @@ PolTree::PolTree(std::fstream &fs, long p) {
 	this->head = tree_read(0, ss);
 }
 
-Node* PolTree::tree_read(int level, std::istringstream &ss) {
+Node* PolModTree::tree_read(int level, std::istringstream &ss) {
 	Node *n;
 	char c;
 	ss.get(c);
@@ -95,32 +91,21 @@ Node* PolTree::tree_read(int level, std::istringstream &ss) {
 	return n;
 }
 
-PolTree::~PolTree() {
+PolModTree::~PolModTree() {
 	delete head;
 }
 
-long PolTree::get_val() {
+long PolModTree::get_val() {
 	return this->head->get_coeff();
 }
 
-void PolTree::eval(int level, long val) {
+void PolModTree::eval(int level, long val) {
 	//evaluate all nodes at the current level
 	for (Node *n : this->nodes[level]) {
 		n->eval(val);
 	}
 }
 
-void PolTree::print() {
-	//this->head->print();
-	for (Node *n : this->nodes[0]) {
-		n->print();
-	}
-	std::cout << std::endl;
-	for (Node *n : this->nodes[1]) {
-		n->print();
-	}
-	std::cout << std::endl;
-	for (Node *n : this->nodes[8]) {
-		n->print();
-	}
+void PolModTree::print() {
+	this->head->print();
 }
