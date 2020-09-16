@@ -1,36 +1,37 @@
-CXX=mpic++
-CXXFLAGS=-g -O3 -pedantic -std=c++11 -Wall -Wextra
-INCLUDE=-I.
+CXX      := -c++
+CXXFLAGS := -pedantic-errors -Wall -Wextra -std=c++11
+LDFLAGS  := -L/usr/lib -lstdc++ -lm
+BUILD    := ./build
+OBJ_DIR  := $(BUILD)/objects
+APP_DIR  := $(BUILD)/apps
+TARGET   := program
+INCLUDE  := -Iinclude/
+SRC      := $(wildcard src/*.cpp)
 
-SRC=main.cpp polgenerator.cpp polmodtree.cpp mathextra.cpp
+OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
-OBJ_DIR=./build
-OBJ=$(SRC:%.cpp=$(OBJ_DIR)/%.o)
+all: build $(APP_DIR)/$(TARGET)
 
-RM=rm -v
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@ $(LDFLAGS)
 
-TARGETS=congr
-DEFAULT_TARGET=congr
+$(APP_DIR)/$(TARGET): $(OBJECTS)
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
 
+.PHONY: all build clean debug release
 
-default: $(DEFAULT_TARGET)
+build:
+	@mkdir -p $(APP_DIR)
+	@mkdir -p $(OBJ_DIR)
 
-congr: $(OBJ)
+debug: CXXFLAGS += -DDEBUG -g
+debug: all
 
-$(TARGETS):
-	$(CXX) -o $@ $(OBJ) $(INCLUDE) $(LDFLAGS) $(LDLIBS)
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
-
-$(OBJ_DIR)/%.o: $(SHARE_DIR)/%.cpp | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+release: CXXFLAGS += -O3
+release: all
 
 clean:
-	$(RM) $(OBJ)
-
-cleanall:
-	$(RM) $(TARGETS) $(OBJ)
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(APP_DIR)/*

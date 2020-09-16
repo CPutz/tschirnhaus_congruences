@@ -1,0 +1,66 @@
+#!/bin/bash
+
+primes=(2 5 7)
+mod=(8 25 49)
+
+for ((ip=0;ip<${#primes[@]};++ip)); do
+    p=${primes[ip]}
+    m=${mod[ip]}
+    for file in ./$p/*.txt; do
+        div=$(grep 'Divisors=' $file | cut -d= -f2)
+        
+        root="${file%.*}"
+        mkdir -p $root
+        
+        #start generating congr script
+        name="${file##*/}"
+        name="${name%.*}"
+        congr_script="../${p}${name}mod${m}"
+        rm -rf "${congr_script}"
+        echo "#!/bin/bash" >> $congr_script
+        echo "" >> $congr_script
+        
+        #create moduli command in script
+        div_list="${div//[\{\},]}"
+        mod_list=""
+        len=0
+        for d in $div_list; do
+            mod_list+="$(($m/$d)),"
+            ((len++))
+        done
+        echo "MODULI=\"-moduli ${mod_list%?}\"" >> $congr_script
+        
+        pols=$(grep 'Pol=' $file | cut -d= -f2 | tr -d ' ')
+        c=1
+        for pol in $pols; do
+            echo "creating tree for ${pol}"
+            polname=$(echo $pol | tr -d ',')
+            curdir=$(pwd)
+            dir="${curdir##*/}/${p}/${name}/${polname}"
+            rm -rf $dir
+            mkdir -p $dir
+            wolframscript -file ./cong_tree.wls "${dir}/" "${div}" "${pol}" "${m}" </dev/null
+            
+            vmod=$(grep 'VarModuli=' "${dir}/varmod.txt" | cut -d= -f2 | tr -d ' {}')
+            echo "VARMODULI${c}=\"-varmoduli ${vmod}\"" >> $congr_script
+            
+            s=""
+            for (( i=1; i<=$len; i++ )); do
+                s+="${dir}/$i.txt,"
+            done
+            echo "INPUT${c}=\"-input ${s%?}\"" >> $congr_script
+            
+            ((c++))
+        done
+        
+        echo "OUTPUT=\"-output output${p}${name}mod${m}.txt\"" >> $congr_script
+        
+        s=""
+        for (( i=1; i<$c; i++ )); do
+            s+=" \$INPUT${i} \$VARMODULI${i}";
+        done
+        echo "./build/apps/program \$MODULI \$OUTPUT${s}" >> $congr_script
+        chmod +x $congr_script
+    done
+done
+
