@@ -10,6 +10,7 @@ std::fstream treestream;
 long degree;
 long discriminant;
 long modulus;
+int locked;
 std::vector<long> divisors;
 std::vector<long> fixedcoefficients;
 
@@ -22,7 +23,7 @@ std::fstream outputstream;
  * Process a single work-unit
  */
 void process_work(PolGenerator &generator, std::vector<int> const &combination) {
-    long coefficients[degree+1];
+    long coefficients[degree+1-locked];
     bool polAvailable = true;
     // Initialize generator with given congruence values, otherwise return;
     if (!generator.init(combination)) {
@@ -35,8 +36,8 @@ void process_work(PolGenerator &generator, std::vector<int> const &combination) 
 
         if (isSquare) {
             generator.create_coefficients(coefficients);
-            outputstream << "<" << coefficients[1];
-            for (int i = 2; i <= degree; i++) {
+            outputstream << "<" << coefficients[0];
+            for (int i = 1; i <= degree - locked; i++) {
                 outputstream << ", " << coefficients[i];
             }
             outputstream << ">," << std::endl;
@@ -146,14 +147,16 @@ int main(int argc, char **argv) {
     PolGenerator generator(degree, modulus, fixedcoefficients, divisors, discriminant, treestream);
     treestream.close();
 
+    std::vector<int> combination = std::vector<int>(); //empty vector
+    locked = fixedcoefficients.size() + combination.size();
+
     outputstream << "{" << modulus;
-    for (int i = 1; i < degree; i++) {
+    for (int i = locked; i < degree; i++) {
         outputstream << ", " << modulus; 
     }
     outputstream << "}" << std::endl;
     outputstream << "[" << std::endl;
 
-    std::vector<int> combination = std::vector<int>(); //empty vector
     process_work(generator, combination);
 
     outputstream << "]" << std::endl;

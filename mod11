@@ -1,11 +1,11 @@
 #!/bin/bash
 
 DEGREE="-degree 8"
-COEFFS="-coeffs 1"
+COEFFS="-coeffs 1,1,0"
 DIVISORS="-divisors 1,1,1,1,1,1,1,1"
 DISC="-discriminant -7"
 MOD="-modulus 11"
 TREE="-tree input/tree.txt"
-OUTPUT="-output Mod11.txt"
+OUTPUT="-output Mod11_test.txt"
 
 ./congr $DEGREE $COEFFS $DIVISORS $DISC $MOD $OUTPUT $TREE

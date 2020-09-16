@@ -119,8 +119,8 @@ bool PolGenerator::configure_next() {
  * in descending order of degree
  */
 void PolGenerator::create_coefficients(long container[]) {
-    std::copy(avalues, avalues + n + 1, container);
-    for (int i = 0; i <= n; i++) {
+    std::copy(avalues + this->locked, avalues + n + 1, container);
+    for (int i = this->locked; i <= n; i++) {
         container[i] *= divisors[i];
     }
 }
