@@ -35,8 +35,7 @@ for ((ip=0;ip<${#primes[@]};++ip)); do
         for pol in $pols; do
             echo "creating tree for ${pol}"
             polname=$(echo $pol | tr -d ',')
-            curdir=$(pwd)
-            dir="${curdir##*/}/${p}/${name}/${polname}"
+            dir="./${p}/${name}/${polname}"
             rm -rf $dir
             mkdir -p $dir
             wolframscript -file ./cong_tree.wls "${dir}/" "${div}" "${pol}" "${m}" </dev/null
@@ -44,9 +43,11 @@ for ((ip=0;ip<${#primes[@]};++ip)); do
             vmod=$(grep 'VarModuli=' "${dir}/varmod.txt" | cut -d= -f2 | tr -d ' {}')
             echo "VARMODULI${c}=\"-varmoduli ${vmod}\"" >> $congr_script
             
+            curdir=$(pwd)
+            inputdir="${curdir##*/}/${p}/${name}/${polname}"
             s=""
             for (( i=1; i<=$len; i++ )); do
-                s+="${dir}/$i.txt,"
+                s+="${inputdir}/$i.txt,"
             done
             echo "INPUT${c}=\"-input ${s%?}\"" >> $congr_script
             

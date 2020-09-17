@@ -1,0 +1,9 @@
+#!/bin/bash
+
+MODULI="-moduli 2,2,2,4,2,2,2,4"
+VARMODULI1="-varmoduli 4,1,1,1,1,1,1,1"
+INPUT1="-input input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/1.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/2.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/3.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/4.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/5.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/6.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/7.txt,input/2/e12/{x^8+8*x^7+32*x^6+16*x^5+16*x^4-16*x^3+24*x^2-28}/8.txt"
+VARMODULI2="-varmoduli 4,4,1,1,4,4,1,1"
+INPUT2="-input input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/1.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/2.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/3.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/4.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/5.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/6.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/7.txt,input/2/e12/{x^4+2*x^3+2*x^2+2x^4+2*x^3+2*x^2+2}/8.txt"
+OUTPUT="-output output2e12mod4.txt"
+./build/apps/program $MODULI $OUTPUT $INPUT1 $VARMODULI1 $INPUT2 $VARMODULI2

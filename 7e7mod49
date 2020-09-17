@@ -1,0 +1,13 @@
+#!/bin/bash
+
+MODULI="-moduli 49,7,7,7,7,7,49,49"
+VARMODULI1="-varmoduli 49,49,49,49,49,49,49,49"
+INPUT1="-input input/7/e7/{x+6x^7+14*x+7}/1.txt,input/7/e7/{x+6x^7+14*x+7}/2.txt,input/7/e7/{x+6x^7+14*x+7}/3.txt,input/7/e7/{x+6x^7+14*x+7}/4.txt,input/7/e7/{x+6x^7+14*x+7}/5.txt,input/7/e7/{x+6x^7+14*x+7}/6.txt,input/7/e7/{x+6x^7+14*x+7}/7.txt,input/7/e7/{x+6x^7+14*x+7}/8.txt"
+VARMODULI2="-varmoduli 49,49,49,49,49,49,49,49"
+INPUT2="-input input/7/e7/{x^8+21}/1.txt,input/7/e7/{x^8+21}/2.txt,input/7/e7/{x^8+21}/3.txt,input/7/e7/{x^8+21}/4.txt,input/7/e7/{x^8+21}/5.txt,input/7/e7/{x^8+21}/6.txt,input/7/e7/{x^8+21}/7.txt,input/7/e7/{x^8+21}/8.txt"
+VARMODULI3="-varmoduli 49,49,49,49,49,49,49,49"
+INPUT3="-input input/7/e7/{x+6x^7+7*x+7}/1.txt,input/7/e7/{x+6x^7+7*x+7}/2.txt,input/7/e7/{x+6x^7+7*x+7}/3.txt,input/7/e7/{x+6x^7+7*x+7}/4.txt,input/7/e7/{x+6x^7+7*x+7}/5.txt,input/7/e7/{x+6x^7+7*x+7}/6.txt,input/7/e7/{x+6x^7+7*x+7}/7.txt,input/7/e7/{x+6x^7+7*x+7}/8.txt"
+VARMODULI4="-varmoduli 49,49,49,49,49,49,49,49"
+INPUT4="-input input/7/e7/{x+6x^7-21*x+7}/1.txt,input/7/e7/{x+6x^7-21*x+7}/2.txt,input/7/e7/{x+6x^7-21*x+7}/3.txt,input/7/e7/{x+6x^7-21*x+7}/4.txt,input/7/e7/{x+6x^7-21*x+7}/5.txt,input/7/e7/{x+6x^7-21*x+7}/6.txt,input/7/e7/{x+6x^7-21*x+7}/7.txt,input/7/e7/{x+6x^7-21*x+7}/8.txt"
+OUTPUT="-output output7e7mod49.txt"
+./build/apps/program $MODULI $OUTPUT $INPUT1 $VARMODULI1 $INPUT2 $VARMODULI2 $INPUT3 $VARMODULI3 $INPUT4 $VARMODULI4

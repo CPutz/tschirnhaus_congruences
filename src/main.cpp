@@ -145,6 +145,13 @@ int main(int argc, char **argv) {
         std::cout << "Could not open file " << outputfile << ", exiting" << std::endl;
         return 1;
     }
+
+    outputstream << "{ " << moduli[0];
+    for (int i = 1; i < moduli.size(); i++) {
+        outputstream << ", " << moduli[i];
+    }
+    outputstream << " }" << std::endl;
+    outputstream << "[" << std::endl;
     
     for (int index = 0; index < treefiles.size(); index++) {
         varmoduli = varmodulii[index];
@@ -166,12 +173,14 @@ int main(int argc, char **argv) {
     }
 
     for (std::vector<int> result : results) {
-        outputstream << result[0];
+        outputstream << "<" << result[0];
         for (int i = 1; i < result.size(); i++) {
             outputstream << ", " << result[i];
         }
-        outputstream << std::endl;
+        outputstream << ">," << std::endl;
     }
+
+    outputstream << "]" << std::endl;
 
     return 0;
 }
