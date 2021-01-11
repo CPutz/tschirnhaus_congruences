@@ -1,0 +1,9 @@
+#!/bin/bash
+
+MODULI="-moduli 8,8,8,8,8,8,8,16"
+VARMODULI1="-varmoduli 16,16,8,8,8,8,8,8"
+INPUT1="-input input/2/e14/{x^8+2*x^7+2}/1.txt,input/2/e14/{x^8+2*x^7+2}/2.txt,input/2/e14/{x^8+2*x^7+2}/3.txt,input/2/e14/{x^8+2*x^7+2}/4.txt,input/2/e14/{x^8+2*x^7+2}/5.txt,input/2/e14/{x^8+2*x^7+2}/6.txt,input/2/e14/{x^8+2*x^7+2}/7.txt,input/2/e14/{x^8+2*x^7+2}/8.txt"
+VARMODULI2="-varmoduli 16,16,8,8,8,8,8,8"
+INPUT2="-input input/2/e14/{x^8+2*x^7-2}/1.txt,input/2/e14/{x^8+2*x^7-2}/2.txt,input/2/e14/{x^8+2*x^7-2}/3.txt,input/2/e14/{x^8+2*x^7-2}/4.txt,input/2/e14/{x^8+2*x^7-2}/5.txt,input/2/e14/{x^8+2*x^7-2}/6.txt,input/2/e14/{x^8+2*x^7-2}/7.txt,input/2/e14/{x^8+2*x^7-2}/8.txt"
+OUTPUT="-output output2e14mod16.txt"
+./build/apps/program $MODULI $OUTPUT $INPUT1 $VARMODULI1 $INPUT2 $VARMODULI2

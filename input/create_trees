@@ -1,7 +1,7 @@
 #!/bin/bash
 
 primes=(2 5 7)
-mod=(8 25 49)
+mod=(16 25 49)
 
 for ((ip=0;ip<${#primes[@]};++ip)); do
     p=${primes[ip]}

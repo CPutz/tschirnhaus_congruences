@@ -7,5 +7,5 @@ for p in "${primes[@]}"; do
 	mkdir "./${p}"
 done
 
-#setenv MAGMA_USER_SPEC "/home/ppz600/Git/etale-algebras/spec"
+#setenv MAGMA_USER_SPEC "/home/cp/Git/etale-algebras/spec"
 magma /home/cp/Git/etale-algebras/EtaleAlgebras/run_etale.m
